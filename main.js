@@ -53,7 +53,7 @@ var canvas = document.getElementById("renderCanvas"); // Get the canvas element
 
 function resizeCanvas(){
         canvas.height = window.innerheight() - 20;
-        canvas.width = window.innerwidth()/2)-20;
+        canvas.width = (window.innerwidth()/2)-20;
         return;
 }
 

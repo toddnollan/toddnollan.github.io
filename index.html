@@ -4,7 +4,7 @@
     <div style="height: 100%; width: 25%; position: fixed; z-index: 1; top: 0; overflow-x: hidden; left: 0; padding-left:10px">
       <h1>Ship Generator</h1>
       <div style="float:left; position:static; height:24; padding:3px;">
-        Page v.034 <div id="versionlabel"> Script not loaded </div>
+        Page v.035 <div id="versionlabel"> Script not loaded </div>
       </div>
       <div style="float:left; position:static; height:24; padding:3px; text-align: center;">
         Seed<br>
@@ -24,12 +24,15 @@
       Settings Pane.
     </div>
     <div style="width:50%; position:fixed; z-index:1; top:0px; right:0px; bottom:0px;">
-      <div id="viewport" style="background-color:#000000; position:absolute; top:10px; bottom:10px; right:10px; left:10px;">
+      <canvas id="renderCanvas" touch-action=none style="position:absolute; top:10px; bottom:10px; right:10px; left:10px;">
         Output Pane.
       </div>
     </div>
     
     
     <script src="main.js"></script>
+    <script src="https://preview.babylonjs.com/babylon.js"></script>
+    <script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+    <script src="https://code.jquery.com/pep/0.4.3/pep.js"></script>
    </body>
 </html>

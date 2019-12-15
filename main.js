@@ -1,10 +1,10 @@
-const scriptVersion = "Script v.007"; //declare version, write to main
+const scriptVersion = "Script v.008"; //declare version, write to main
 document.getElementById("versionlabel").innerHTML = scriptVersion;
 //Find and assign the three output panes
 const hullsOut = document.getElementById("hullspane");
 const settingsOut = document.getElementById("settingspane");
 
-hullsOut.innerHTML = "Sometimes, I dream about cheese."
+hullsOut.innerHTML = "Sometimes, I dream about cheese.";
 
 resizeCanvas();
 
@@ -54,7 +54,7 @@ var canvas = document.getElementById("renderCanvas"); // Get the canvas element
 function resizeCanvas(){
         canvas.height = $(window).height() - 20;
         canvas.width = ($(window).width()/2)-20;
-
+        return;
 }
 
 

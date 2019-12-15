@@ -1,4 +1,4 @@
-const scriptVersion = "Script v.010"; //declare version, write to main
+const scriptVersion = "Script v.011"; //declare version, write to main
 document.getElementById("versionlabel").innerHTML = scriptVersion;
 //Find and assign the three output panes
 const hullsOut = document.getElementById("hullspane");
@@ -6,12 +6,12 @@ const settingsOut = document.getElementById("settingspane");
 
 hullsOut.innerHTML = "Sometimes, I dream about cheese.";
 
-resizeCanvas();
 
 
 /**** BABYLON PREMADE ****/
 
 var canvas = document.getElementById("renderCanvas"); // Get the canvas element 
+resizeCanvas();
         var engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
 
         /******* Add the create scene function ******/

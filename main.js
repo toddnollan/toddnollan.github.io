@@ -1,4 +1,4 @@
-const scriptVersion = "Script v.009"; //declare version, write to main
+const scriptVersion = "Script v.010"; //declare version, write to main
 document.getElementById("versionlabel").innerHTML = scriptVersion;
 //Find and assign the three output panes
 const hullsOut = document.getElementById("hullspane");
@@ -52,8 +52,8 @@ var canvas = document.getElementById("renderCanvas"); // Get the canvas element
 
 
 function resizeCanvas(){
-        canvas.height = window.innerheight() - 20;
-        canvas.width = (window.innerwidth()/2)-20;
+        canvas.height = window.innerheight - 20;
+        canvas.width = (window.innerwidth/2)-20;
         return;
 }
 

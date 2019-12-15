@@ -1,10 +1,12 @@
-const scriptVersion = "Script v.006"; //declare version, write to main
+const scriptVersion = "Script v.007"; //declare version, write to main
 document.getElementById("versionlabel").innerHTML = scriptVersion;
 //Find and assign the three output panes
 const hullsOut = document.getElementById("hullspane");
 const settingsOut = document.getElementById("settingspane");
 
 hullsOut.innerHTML = "Sometimes, I dream about cheese."
+
+resizeCanvas();
 
 
 /**** BABYLON PREMADE ****/
@@ -42,7 +44,20 @@ var canvas = document.getElementById("renderCanvas"); // Get the canvas element
 
         // Watch for browser/canvas resize events
         window.addEventListener("resize", function () { 
+                resizeCanvas();
                 engine.resize();
         });
 
 /**** END BABYLON ****/
+
+
+function resizeCanvas(){
+        canvas.height = $(window).height() - 20;
+        canvas.width = ($(window).width()/2)-20;
+
+}
+
+
+
+
+

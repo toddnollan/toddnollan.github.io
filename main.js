@@ -1,4 +1,4 @@
-const scriptVersion = "Script v.012"; //declare version, write to main
+const scriptVersion = "Script v.013"; //declare version, write to main
 document.getElementById("versionlabel").innerHTML = scriptVersion;
 //Find and assign the three output panes
 const hullsOut = document.getElementById("hullspane");
@@ -47,6 +47,15 @@ resizeCanvas();
                 resizeCanvas();
                 engine.resize();
         });
+
+var skybox = BABYLON.MeshBuilder.CreateBox("skyBox", {size:1000.0}, scene);
+var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+skyboxMaterial.backFaceCulling = false;
+skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("textures/skybox", scene);
+skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+skybox.material = skyboxMaterial;
 
 /**** END BABYLON ****/
 

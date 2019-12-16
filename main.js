@@ -1,4 +1,4 @@
-const scriptVersion = "Script v.014"; //declare version, write to main
+const scriptVersion = "Script v.015"; //declare version, write to main
 document.getElementById("versionlabel").innerHTML = scriptVersion;
 //Find and assign the three output panes
 const hullsOut = document.getElementById("hullspane");
@@ -21,7 +21,7 @@ resizeCanvas();
             var scene = new BABYLON.Scene(engine);
 
             // Add a camera to the scene and attach it to the canvas
-            var camera = new BABYLON.ArcRotateCamera("Camera", Math.PI / 2, Math.PI / 2, 2, new BABYLON.Vector3(0,0,5), scene);
+            var camera = new BABYLON.ArcRotateCamera("Camera", Math.PI / 2, Math.PI / 2, 2, new BABYLON.Vector3(0,0,0), scene);
             camera.attachControl(canvas, true);
 
             // Add lights to the scene

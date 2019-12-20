@@ -1,4 +1,4 @@
-const scriptVersion = "Script v.015"; //declare version, write to main
+const scriptVersion = "Script v.017"; //declare version, write to main
 document.getElementById("versionlabel").innerHTML = scriptVersion;
 //Declare Variables and constants
 const hullsOut = document.getElementById("hullspane");
@@ -65,7 +65,7 @@ function main(){
 }
 
 function addHull(hRoot){
-        let hull{ // base objects of any craft.
+        let hull={ // base objects of any craft.
                 root    :hRoot; //Hulls index of parent hull. If negative, offsets are taken as absolute
                 offset  :[0,0,0]; //XYZ right-left,up-down,forward-back, offset from parent
                 scale   :[1,1,5]; //width/hieght/length. Not inherited by hulls, situationally inherited by others
@@ -94,19 +94,19 @@ function addHull(hRoot){
                 };
                 
                 addWing :function(){
-                        let wing{ //large, forward-aligned details.
+                        let wing={ //large, forward-aligned details.
                                 root    :-1 //index of parent hull
                                 //TODO
                         } 
-                }
+                };
                 
                 addDetail:function(){
-                        let detail{
+                        let detail={
                                 root    :-1 //index of parent hull or strut
                                 boolType:-1 //0=join, 1=cut, 2=both
                                 //TODO
                         }       
-                }
+                };
                 
         //TODO
         }
@@ -116,7 +116,7 @@ function addHull(hRoot){
 function addStrut(){
         if (hulls.length < 2){return;}
         
-        let strut{ //large, forward aligned connectors between hulls
+        let strut={ //large, forward aligned connectors between hulls
                 roots   :[-1,-1]; //indexes of parent hulls. required to generate, changeable in details panel.
                 scale   :[1,1]; //y-z scale. X is set by hulls distance
                 bias    :[0,0,0]; //xyz bias of curve

@@ -1,4 +1,4 @@
-const scriptVersion = "Script v.017"; //declare version, write to main
+const scriptVersion = "Script v.018"; //declare version, write to main
 document.getElementById("versionlabel").innerHTML = scriptVersion;
 //Declare Variables and constants
 const hullsOut = document.getElementById("hullspane");
@@ -66,21 +66,21 @@ function main(){
 
 function addHull(hRoot){
         let hull={ // base objects of any craft.
-                root    :hRoot; //Hulls index of parent hull. If negative, offsets are taken as absolute
-                offset  :[0,0,0]; //XYZ right-left,up-down,forward-back, offset from parent
-                scale   :[1,1,5]; //width/hieght/length. Not inherited by hulls, situationally inherited by others
-                bias    :[0,0,0]; //XYZ generation bulge bias
-                cStruts :[]; //array of index values for child struts
-                cHulls  :[]; //array of index values for child hulls
-                wings   :[]; //array of wing objects owned by this
-                details :[]; //array of detail objects owned by this
-                cMenu   :null; //child settings pane menu, if any
-                style   :0; //style selector. This is fed to the generator
+                root    :hRoot, //Hulls index of parent hull. If negative, offsets are taken as absolute
+                offset  :[0,0,0], //XYZ right-left,up-down,forward-back, offset from parent
+                scale   :[1,1,5], //width/hieght/length. Not inherited by hulls, situationally inherited by others
+                bias    :[0,0,0], //XYZ generation bulge bias
+                cStruts :[], //array of index values for child struts
+                cHulls  :[], //array of index values for child hulls
+                wings   :[], //array of wing objects owned by this
+                details :[], //array of detail objects owned by this
+                cMenu   :null, //child settings pane menu, if any
+                style   :0, //style selector. This is fed to the generator
         
                 validRoot:function(){ //returns boolean of whether root points to a proper parent
                         if (this.root>=0 && this.root<hulls.length){return true;}
                         return false;
-                };
+                },
                 
                 position:function(){ //returns 3 item array of xyz positions.
                         if (!this.validRoot()){return this.offsets;}
@@ -91,22 +91,22 @@ function addHull(hRoot){
                                 out[i]=rootPos[i]+this.offset[i];
                         }
                         return out;
-                };
+                },
                 
                 addWing :function(){
                         let wing={ //large, forward-aligned details.
                                 root    :-1 //index of parent hull
                                 //TODO
                         } 
-                };
+                },
                 
                 addDetail:function(){
                         let detail={
-                                root    :-1 //index of parent hull or strut
+                                root    :-1, //index of parent hull or strut
                                 boolType:-1 //0=join, 1=cut, 2=both
                                 //TODO
                         }       
-                };
+                }
                 
         //TODO
         }
@@ -117,11 +117,11 @@ function addStrut(){
         if (hulls.length < 2){return;}
         
         let strut={ //large, forward aligned connectors between hulls
-                roots   :[-1,-1]; //indexes of parent hulls. required to generate, changeable in details panel.
-                scale   :[1,1]; //y-z scale. X is set by hulls distance
-                bias    :[0,0,0]; //xyz bias of curve
-                details :[];
-                style   :0;
+                roots   :[-1,-1], //indexes of parent hulls. required to generate, changeable in details panel.
+                scale   :[1,1], //y-z scale. X is set by hulls distance
+                bias    :[0,0,0], //xyz bias of curve
+                details :[],
+                style   :0
         }
         //TODO
 }

@@ -1,4 +1,4 @@
-const scriptVersion = "Script v.018"; //declare version, write to main
+const scriptVersion = "Script v.019"; //declare version, write to main
 document.getElementById("versionlabel").innerHTML = scriptVersion;
 //Declare Variables and constants
 const hullsOut = document.getElementById("hullspane");
@@ -126,7 +126,7 @@ function addStrut(){
         //TODO
 }
 
-function renderHullsPane{
+function renderHullsPane(){
         hullsOut.innerHTML = "begin here";
 }
         

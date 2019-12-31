@@ -1,4 +1,4 @@
-const scriptVersion = "Script v.019"; //declare version, write to main
+const scriptVersion = "Script v.020"; //declare version, write to main
 document.getElementById("versionlabel").innerHTML = scriptVersion;
 //Declare Variables and constants
 const hullsOut = document.getElementById("hullspane");
@@ -61,7 +61,7 @@ function resizeCanvas(){ //runs when the window size changes, hopefully.
 
 //end of babylon init stuff
 
-main(); // I hate javascript... what if I just pretended I wasn't using it.
+main(); // shhh
 
 function main(){
         addHull(-1);
@@ -113,6 +113,7 @@ function addHull(hRoot){
                 
         //TODO
         }
+        hulls.push(hull);
         renderHullsPane();
 }
 
@@ -127,12 +128,61 @@ function addStrut(){
                 style   :0
         }
         //TODO
+        renderHullsPane();
 }
 
 function renderHullsPane(){
-        hullsOut.innerHTML = "begin here";
+        let newli;
+        let i;
+        //Add Hulls title
+        newli = document.createElement("li");
+        addButton(newli,"+","Add Hull","addHull(-1)");
+        newli.append(" Hulls: " + hulls.length.toString());
+        hullspane.appendChild(newli);
+        //Add Hulls
+        for (i = 0; i < hulls.length; i++) {
+                newli = document.createElement("li");
+                addButton(newli,"-","Remove Hull","removeHull("+i.toString()+")");
+                newli.append(" Hull "+i.toString()+" ");
+                addButton(newli,"→","Expand to Options Pane","expandHull("+i.toString()+")");
+                hullspane.appendChild(newli);
+        }
+        //Add Struts title
+        newli = document.createElement("li");
+        addButton(newli,"+","Add Strut","addStrut(-1)");
+        newli.append(" Struts: " + struts.length.toString());
+        hullspane.appendChild(newli);
+        //Add Struts
+        for (i = 0; i < struts.length; i++) {
+                newli = document.createElement("li");
+                addButton(newli,"-","Remove Strut","removeStrut("+i.toString()+")");
+                newli.append(" Strut "+i.toString()+" ");
+                addButton(newli,"→","Expand to Options Pane","expandStrut("+i.toString()+")");
+                hullspane.appendChild(newli);
+        }
 }
-        
+function addButton(element, text, mouseover, funct){//Adds a button w/ arguments to the passed element
+        let newbutton = document.createElement("button");
+        newbutton.innerHTML = text;
+        newbutton.title = mouseover;
+        newbutton.setAttribute("onClick",funct);
+        element.appendChild(newbutton);
+}
 
+function removeHull(index){
+        
+}
+
+function removeStrut(index){
+        
+}
+
+function expandHull(index){//expands a hull's options to the settings pane
+        
+}
+
+function expandStrut(index){//expands a strut's options to the settings pane
+        
+}
 
 

@@ -1,4 +1,4 @@
-const scriptVersion = "Script v.021"; //declare version, write to main
+const scriptVersion = "Script v.022"; //declare version, write to main
 document.getElementById("versionlabel").innerHTML = scriptVersion;
 //Declare Variables and constants
 const hullspane = document.getElementById("hullspane");
@@ -132,6 +132,13 @@ function addStrut(){
 }
 
 function renderHullsPane(){
+        //clear pane
+        let child = hullspane.lastElementChild;  
+        while (child) { 
+            hullspane.removeChild(child); 
+            child = hullspane.lastElementChild; 
+        } 
+        
         let newli;
         let i;
         //Add Hulls title

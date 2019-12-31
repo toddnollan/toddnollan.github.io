@@ -1,8 +1,8 @@
-const scriptVersion = "Script v.020"; //declare version, write to main
+const scriptVersion = "Script v.021"; //declare version, write to main
 document.getElementById("versionlabel").innerHTML = scriptVersion;
 //Declare Variables and constants
-const hullsOut = document.getElementById("hullspane");
-const settingsOut = document.getElementById("settingspane");
+const hullspane = document.getElementById("hullspane");
+const settingspane = document.getElementById("settingspane");
 let hulls = [];
 let struts = [];
 

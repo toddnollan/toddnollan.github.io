@@ -1,4 +1,4 @@
-const scriptVersion = "Script v.023"; //declare version, write to main
+const scriptVersion = "Script v.024"; //declare version, write to main
 document.getElementById("versionlabel").innerHTML = scriptVersion;
 //Declare Variables and constants
 const hullspane = document.getElementById("hullspane");
@@ -70,6 +70,7 @@ function main(){
 function addHull(hRoot){
         let hull={ // base objects of any craft.
                 root    :hRoot, //Hulls index of parent hull. If negative, offsets are taken as absolute
+                name    :"unnamed", //displays in hulls list
                 offset  :[0,0,0], //XYZ right-left,up-down,forward-back, offset from parent
                 scale   :[1,1,5], //width/hieght/length. Not inherited by hulls, situationally inherited by others
                 bias    :[0,0,0], //XYZ generation bulge bias
@@ -119,6 +120,7 @@ function addStrut(){
         
         let strut={ //large, forward aligned connectors between hulls
                 roots   :[-1,-1], //indexes of parent hulls. required to generate, changeable in details panel.
+                name    :"unnamed", // displays in hulls list
                 scale   :[1,1], //y-z scale. X is set by hulls distance
                 bias    :[0,0,0], //xyz bias of curve
                 details :[],
@@ -148,7 +150,7 @@ function renderHullsPane(){
         for (i = 0; i < hulls.length; i++) {
                 newli = document.createElement("li");
                 addButton(newli,"-","Remove Hull","removeHull("+i.toString()+")");
-                newli.append(" Hull "+i.toString()+" ");
+                newli.append(" "+hulls[i].name+" ");
                 addButton(newli,"→","Expand to Options Pane","expandHull("+i.toString()+")");
                 hullspane.appendChild(newli);
         }
@@ -161,7 +163,7 @@ function renderHullsPane(){
         for (i = 0; i < struts.length; i++) {
                 newli = document.createElement("li");
                 addButton(newli,"-","Remove Strut","removeStrut("+i.toString()+")");
-                newli.append(" Strut "+i.toString()+" ");
+                newli.append(" "+struts[i].name+" ");
                 addButton(newli,"→","Expand to Options Pane","expandStrut("+i.toString()+")");
                 hullspane.appendChild(newli);
         }

@@ -96,16 +96,16 @@ function addHull(hRoot){
                 addWing :function(){
                         let wing={ //large, forward-aligned details.
                                 //TODO
-                                this['wings'].push(wing);
                         } 
+                        this.wings.push(wing);
                 },
                 
                 addDetail:function(){
                         let detail={
                                 boolType:-1 //0=join, 1=cut, 2=both
                                 //TODO
-                                this.details.push(detail);
-                        }       
+                        }     
+                        this.details.push(detail);  
                 }
                 
         //TODO

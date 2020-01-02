@@ -75,6 +75,7 @@ function addHull(){
                 details :[], //array of detail objects owned by this
                 style   :0, //style selector. This is fed to the generator
                 posSearch       :false, //is searching for position value to prevent loops
+                dropState	:[false,false,false], //state of drop-down menus in settings
         
                 validRoot:function(){ //returns boolean of whether root points to a proper parent
                         if (this.root>=0 && this.root<hulls.length){return true;}
@@ -130,7 +131,8 @@ function addStrut(){
                 pathBias        :[0,0,0], //xyz bias of curve
                 thickBias       :[0,0,0], //xyz bias of thickness
                 details :[],
-                style   :0
+                style   :0,
+                dropState	:[false,false,false] //state of drop-down menus in settings
         }
         //TODO
         struts.push(strut);
@@ -171,16 +173,22 @@ function renderStrutSettings(node, index){//fills the passed node with data from
 }
 
 function renderCountPane(){
+        let child = countPane.children[0];
+        while (child) { 
+                countPane.removeChild(child); 
+                child = countPane.children[0];
+        }
+        
         let newDiv;
         //Add Hulls title
         newDiv = document.createElement("div");
-        newDiv.style = "width:100;";
+        newDiv.style = "width:100; float:left";
         addButton(newDiv,"+","Add Hull","addHull(-1)");
         newDiv.append(" Hulls: " + hulls.length.toString());
         countPane.appendChild(newDiv);
         //Add Struts title
         newDiv = document.createElement("div");
-        newDiv.style = "width:100;";
+        newDiv.style = "width:100; float:right";
         addButton(newDiv,"+","Add Strut","addStrut(-1)");
         newDiv.append(" Struts: " + struts.length.toString());
         countPane.appendChild(newDiv);

@@ -1,7 +1,7 @@
 const scriptVersion = "Script v.025"; //declare version, write to main
 document.getElementById("versionlabel").innerHTML = scriptVersion;
 //Declare Variables and constants
-const hullsPane = document.getElementById("hullspane");
+const countPane = document.getElementById("countpane");
 const leftPane = document.getElementById("leftpane");
 let hulls = [];
 let struts = [];
@@ -61,15 +61,12 @@ function resizeCanvas(){ //runs when the window size changes, hopefully.
 
 //end of babylon init stuff
 
-main(); // shhh
+addHull(); //just opening with *something*. Strictly speaking, is not needed.
 
-function main(){
-        addHull(-1);
-}
 
-function addHull(hRoot){
+function addHull(){
         let hull={ // base objects of any craft.
-                root    :hRoot, //Hulls index of parent hull. If negative, offsets are taken as absolute
+                root    :-1, //Hulls index of parent hull. If negative, offsets are taken as absolute
                 name    :"unnamed", //displays in hulls list
                 offset  :[0,0,0], //XYZ right-left,up-down,forward-back, offset from parent
                 scale   :[1,1,5], //width/hieght/length. Not inherited by hulls, situationally inherited by others
@@ -77,6 +74,7 @@ function addHull(hRoot){
                 wings   :[], //array of wing objects owned by this
                 details :[], //array of detail objects owned by this
                 style   :0, //style selector. This is fed to the generator
+                posSearch       :false, //is searching for position value to prevent loops
         
                 validRoot:function(){ //returns boolean of whether root points to a proper parent
                         if (this.root>=0 && this.root<hulls.length){return true;}
@@ -85,12 +83,19 @@ function addHull(hRoot){
                 
                 position:function(){ //returns 3 item array of xyz positions.
                         if (!this.validRoot()){return this.offsets;}
+                        this.posSearch = true;
+                        if (hulls[this.root].posSearch){
+                                this.posSearch = false;
+                                this.root = -1;
+                                return this.offsets;
+                        }
                         let rootPos = hulls[this.root].position();
                         let out = [];
                         let i;
                         for (i = 0; i < 3; i++) {
                                 out[i]=rootPos[i]+this.offset[i];
                         }
+                        this.posSearch = false;
                         return out;
                 },
                 
@@ -103,16 +108,16 @@ function addHull(hRoot){
                 
                 addDetail:function(){
                         let detail={
-                                boolType:-1 //0=join, 1=cut, 2=both
+                                type:0, //supercategory of style, will index to things like engines and blocky and such
+                                style:0
                                 //TODO
                         }     
                         this.details.push(detail);  
                 }
-                
-        //TODO
+              
         }
         hulls.push(hull);
-        renderHullsPane();
+        renderSettings();
 }
 
 function addStrut(){
@@ -129,46 +134,58 @@ function addStrut(){
         }
         //TODO
         struts.push(strut);
-        renderHullsPane();
+        renderSettings();
 }
 
-function renderHullsPane(){
-        //clear pane
-        let child = hullsPane.lastElementChild;  
+function renderSettings(){//redraws all settings fields
+        renderCountPane();
+        //clear all (but first, which contains imporant things)
+        let child = leftPane.children[1];
         while (child) { 
-            hullsPane.removeChild(child); 
-            child = hullsPane.lastElementChild; 
-        } 
-        
-        let newli;
-        let i;
-        //Add Hulls title
-        newli = document.createElement("li");
-        addButton(newli,"+","Add Hull","addHull(-1)");
-        newli.append(" Hulls: " + hulls.length.toString());
-        hullsPane.appendChild(newli);
-        //Add Hulls
-        for (i = 0; i < hulls.length; i++) {
-                newli = document.createElement("li");
-                addButton(newli,"-","Remove Hull","removeHull("+i.toString()+")");
-                newli.append(" "+hulls[i].name+" ");
-                addButton(newli,"→","Expand to Options Pane","expandHull("+i.toString()+")");
-                hullsPane.appendChild(newli);
+                hullsPane.removeChild(child); 
+                child = hullsPane.children[1];
         }
-        //Add Struts title
-        newli = document.createElement("li");
-        addButton(newli,"+","Add Strut","addStrut(-1)");
-        newli.append(" Struts: " + struts.length.toString());
-        hullsPane.appendChild(newli);
-        //Add Struts
-        for (i = 0; i < struts.length; i++) {
-                newli = document.createElement("li");
-                addButton(newli,"-","Remove Strut","removeStrut("+i.toString()+")");
-                newli.append(" "+struts[i].name+" ");
-                addButton(newli,"→","Expand to Options Pane","expandStrut("+i.toString()+")");
-                hullsPane.appendChild(newli);
+        //create elements and call filler function
+        let newDiv;
+        let i;
+        for (i=0;i<hulls.length;i++){
+                newDiv = document.createElement("div");
+                newDiv.style = "float:left; position:static; padding:3px;";
+                renderHullSettings(newDiv, i);
+                leftPane.appendChild(newDiv);
+        }
+        for (i=0;i<struts.length;i++){
+                newDiv = document.createElement("div");
+                newDiv.style = "float:left; position:static; padding:3px;";
+                renderStrutSettings(newDiv, i);
+                leftPane.appendChild(newDiv);
         }
 }
+
+function renderHullSettings(node, index){//fills the passed node with data from the given index
+        
+}
+
+function renderStrutSettings(node, index){//fills the passed node with data from the given index
+        
+}
+
+function renderCountPane(){
+        let newDiv;
+        //Add Hulls title
+        newDiv = document.createElement("div");
+        newDiv.style = "width:100;";
+        addButton(newDiv,"+","Add Hull","addHull(-1)");
+        newDiv.append(" Hulls: " + hulls.length.toString());
+        countPane.appendChild(newDiv);
+        //Add Struts title
+        newDiv = document.createElement("div");
+        newDiv.style = "width:100;";
+        addButton(newli,"+","Add Strut","addStrut(-1)");
+        newDiv.append(" Struts: " + struts.length.toString());
+        countPane.appendChild(newli);
+}
+
 function addButton(element, text, mouseover, funct){//Adds a button w/ arguments to the passed element
         let newbutton = document.createElement("button");
         newbutton.innerHTML = text;
@@ -189,36 +206,25 @@ function removeHull(index){
         }
         for (i=0; i<struts.length; i++){
                 if(struts[i].roots[0] == index){
-                     struts[i].roots[0] = -1;   
+                        struts[i].roots[0] = -1;   
                 } else if (struts[i].roots[0] > index) {
                         struts[i].roots[0]--;
                 }
                 if(struts[i].roots[1] == index){
-                     struts[i].roots[1] = -1;   
+                        struts[i].roots[1] = -1;   
                 } else if (struts[i].roots[1] > index) {
                         struts[i].roots[1]--;
                 }
         }
         hulls.splice(index,1);
-        renderHullsPane();
+        renderSettings();
 }
 
 function removeStrut(index){
         struts.splice(index,1);
-        renderHullsPane();
+        renderSettings();
 }
 
-function clearSettings(){ //empties the settings panel
-        
-}
-
-function expandHull(index){//expands a hull's options to the settings pane
-        
-}
-
-function expandStrut(index){//expands a strut's options to the settings pane
-        
-}
 
 
 

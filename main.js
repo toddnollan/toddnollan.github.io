@@ -2,7 +2,7 @@ const scriptVersion = "Script v.024"; //declare version, write to main
 document.getElementById("versionlabel").innerHTML = scriptVersion;
 //Declare Variables and constants
 const hullspane = document.getElementById("hullspane");
-const settingspane = document.getElementById("settingspane");
+//const settingspane = document.getElementById("settingspane");
 let hulls = [];
 let struts = [];
 
@@ -122,7 +122,8 @@ function addStrut(){
                 roots   :[-1,-1], //indexes of parent hulls. required to generate, changeable in details panel.
                 name    :"unnamed", // displays in hulls list
                 scale   :[1,1], //y-z scale. X is set by hulls distance
-                bias    :[0,0,0], //xyz bias of curve
+                pathBias        :[0,0,0], //xyz bias of curve
+                thickBias       :[0,0,0], //xyz bias of thickness
                 details :[],
                 style   :0
         }
@@ -177,11 +178,11 @@ function addButton(element, text, mouseover, funct){//Adds a button w/ arguments
 }
 
 function removeHull(index){
-        hulls.splice(index,1);
         let i;
         for (i=0; i<hulls.length; i++){
                 if(hulls[i].root == index){
-                     hulls[i].root = -1;   
+                        hulls[i].offset = hulls[i].position();
+                        hulls[i].root = -1;   
                 } else if (hulls[i].root > index) {
                         hulls[i].root--;
                 }
@@ -198,12 +199,17 @@ function removeHull(index){
                         struts[i].roots[1]--;
                 }
         }
+        hulls.splice(index,1);
         renderHullsPane();
 }
 
 function removeStrut(index){
         struts.splice(index,1);
         renderHullsPane();
+}
+
+function clearSettings(){ //empties the settings panel
+        
 }
 
 function expandHull(index){//expands a hull's options to the settings pane
@@ -213,5 +219,17 @@ function expandHull(index){//expands a hull's options to the settings pane
 function expandStrut(index){//expands a strut's options to the settings pane
         
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 

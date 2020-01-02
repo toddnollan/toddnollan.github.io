@@ -96,7 +96,7 @@ function addHull(hRoot){
                 addWing :function(){
                         let wing={ //large, forward-aligned details.
                                 //TODO
-                                this.wings.push(wing);
+                                this['wings'].push(wing);
                         } 
                 },
                 

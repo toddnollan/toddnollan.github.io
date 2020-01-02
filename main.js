@@ -1,4 +1,4 @@
-const scriptVersion = "Script v.022"; //declare version, write to main
+const scriptVersion = "Script v.023"; //declare version, write to main
 document.getElementById("versionlabel").innerHTML = scriptVersion;
 //Declare Variables and constants
 const hullspane = document.getElementById("hullspane");
@@ -73,11 +73,8 @@ function addHull(hRoot){
                 offset  :[0,0,0], //XYZ right-left,up-down,forward-back, offset from parent
                 scale   :[1,1,5], //width/hieght/length. Not inherited by hulls, situationally inherited by others
                 bias    :[0,0,0], //XYZ generation bulge bias
-                cStruts :[], //array of index values for child struts
-                cHulls  :[], //array of index values for child hulls
                 wings   :[], //array of wing objects owned by this
                 details :[], //array of detail objects owned by this
-                cMenu   :null, //child settings pane menu, if any
                 style   :0, //style selector. This is fed to the generator
         
                 validRoot:function(){ //returns boolean of whether root points to a proper parent
@@ -98,16 +95,16 @@ function addHull(hRoot){
                 
                 addWing :function(){
                         let wing={ //large, forward-aligned details.
-                                root    :-1 //index of parent hull
                                 //TODO
+                                this.wings.push(wing);
                         } 
                 },
                 
                 addDetail:function(){
                         let detail={
-                                root    :-1, //index of parent hull or strut
                                 boolType:-1 //0=join, 1=cut, 2=both
                                 //TODO
+                                this.details.push(detail);
                         }       
                 }
                 
@@ -128,6 +125,7 @@ function addStrut(){
                 style   :0
         }
         //TODO
+        struts.push(strut);
         renderHullsPane();
 }
 
@@ -177,11 +175,33 @@ function addButton(element, text, mouseover, funct){//Adds a button w/ arguments
 }
 
 function removeHull(index){
-        
+        hulls.splice(index,1);
+        let i;
+        for (i=0; i<hulls.length; i++){
+                if(hulls[i].root == index){
+                     hulls[i].root = -1;   
+                } else if (hulls[i].root > index) {
+                        hulls[i].root--;
+                }
+        }
+        for (i=0; i<struts.length; i++){
+                if(struts[i].roots[0] == index){
+                     struts[i].roots[0] = -1;   
+                } else if (struts[i].roots[0] > index) {
+                        struts[i].roots[0]--;
+                }
+                if(struts[i].roots[1] == index){
+                     struts[i].roots[1] = -1;   
+                } else if (struts[i].roots[1] > index) {
+                        struts[i].roots[1]--;
+                }
+        }
+        renderHullsPane();
 }
 
 function removeStrut(index){
-        
+        struts.splice(index,1);
+        renderHullsPane();
 }
 
 function expandHull(index){//expands a hull's options to the settings pane

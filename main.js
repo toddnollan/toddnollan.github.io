@@ -181,9 +181,9 @@ function renderCountPane(){
         //Add Struts title
         newDiv = document.createElement("div");
         newDiv.style = "width:100;";
-        addButton(newli,"+","Add Strut","addStrut(-1)");
+        addButton(newDiv,"+","Add Strut","addStrut(-1)");
         newDiv.append(" Struts: " + struts.length.toString());
-        countPane.appendChild(newli);
+        countPane.appendChild(newDiv);
 }
 
 function addButton(element, text, mouseover, funct){//Adds a button w/ arguments to the passed element

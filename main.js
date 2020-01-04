@@ -1,8 +1,11 @@
-const scriptVersion = "Script v.025"; //declare version, write to main
+const scriptVersion = "Script v.026"; //declare version, write to main
 document.getElementById("versionlabel").innerHTML = scriptVersion;
 //Declare Variables and constants
 const countPane = document.getElementById("countpane");
 const leftPane = document.getElementById("leftpane");
+const hullStyles = ["Spheroid","Beveled Cuboid"];
+
+
 let hulls = [];
 let struts = [];
 
@@ -62,7 +65,6 @@ function resizeCanvas(){ //runs when the window size changes, hopefully.
 //end of babylon init stuff
 
 addHull(); //just opening with *something*. Strictly speaking, is not needed.
-
 
 function addHull(){
         let hull={ // base objects of any craft.
@@ -144,8 +146,8 @@ function renderSettings(){//redraws all settings fields
         //clear all (but first, which contains imporant things)
         let child = leftPane.children[1];
         while (child) { 
-                hullsPane.removeChild(child); 
-                child = hullsPane.children[1];
+                leftPane.removeChild(child); 
+                child = leftPane.children[1];
         }
         //create elements and call filler function
         let newDiv;
@@ -164,7 +166,129 @@ function renderSettings(){//redraws all settings fields
         }
 }
 
+function renderHullHandler(index){renderHullSettings(leftPane.children[index+1],index);}
+
+function renderStrutHandler(index){renderStrutSettings(leftPane.children[index+1+hulls.length],index);}
+
 function renderHullSettings(node, index){//fills the passed node with data from the given index
+        let hullData = hulls[index];
+        let nodeIndex = index+1;
+        let newNode;
+        let i;
+        if (hullData.dropState[0]){
+                node.append(hullData.name + " ");
+                addButton(node,"▼","Expand options","redrawButton("+nodeIndex.toString()+",0,true)");
+                return;
+        }
+        //Name and collapse settings
+        newNode = document.createElement("input");
+        newNode.type = "text";
+        newNode.value = hullData.name;
+        newNode.setAttribute("onchange","changeHullSetting("+index.toString()+",0,this.value)");
+        node.append(newNode);
+        addButton(node,"◄","Collapse options","redrawButton("+nodeIndex.toString()+",0,false)");
+        node.append(document.createElement("br"));
+        
+        //delete hull
+        addButton(node,"Delete Hull","Removes this Hull.","removeHull("+index.toString()+")");
+        node.append(document.createElement("br"));
+        
+        //parent
+        node.append("Parent: ");
+        newNode = [];
+        newNode[0] = document.createElement("select");
+        newNode[1] = document.createElement("option");
+        newNode[1].value = -1;
+        newNode[1].innerText = "None";
+        newNode[0].append(newNode[1]);
+        for (i = index + 1; i<hulls.length; i++){
+                newNode[1] = document.createElement("option");
+                newNode[1].value = i;
+                newNode[1].innerText = hulls[i].name;
+                newNode[0].append(newNode[1]);
+        }
+        newNode[0].title = "If a parent is set, position is inherited from it. If you don't know what this means, leave it at None";
+        newNode[0].setAttribute("onchange","changeHullSetting("+index.toString()+",1,this.value)");
+        node.append(newNode[0]);
+        node.append(document.createElement("br"));
+        
+        //Style
+        node.append("Style: ");
+        newNode = [];
+        newNode[0] = document.createElement("select");
+        for (i = 0; i<hullStyles.length; i++){
+                newNode[1] = document.createElement("option");
+                newNode[1].value = i;
+                newNode[1].innerText = hullStyles[i];
+                newNode[0].append(newNode[1]);
+        }
+        newNode[0].setAttribute("onchange","changeHullSetting("+index.toString()+",2,this.value)");
+        node.append(newNode[0]);
+        node.append(document.createElement("br"));
+        
+        //offset
+        node.append("Position: ");
+        for (i=0;i<3;i++){
+                newNode = document.createElement("input");
+                newNode.type = "number";
+                newNode.value = "0";
+                newNode.style = "width:40px; background-color:#202020; border-color:#101010; color:#909090;";
+                newNode.setAttribute("onchange","changeHullSetting("+index.toString()+",+"(3+i).toString()"+,this.value)");
+                node.append(newNode);
+        }     
+        node.append(document.createElement("br"));
+        
+        //Scale
+        node.append("Scale: ");
+        for (i=0;i<3;i++){
+                newNode = document.createElement("input");
+                newNode.type = "number";
+                newNode.value = "1";
+                newNode.style = "width:40px; background-color:#202020; border-color:#101010; color:#909090;";
+                newNode.setAttribute("onchange","changeHullSetting("+index.toString()+",+"(6+i).toString()"+,this.value)");
+                node.append(newNode);
+        }     
+        node.append(document.createElement("br"));
+        
+        //Bias
+        node.append("Bias: ");
+        for (i=0;i<3;i++){
+                newNode = document.createElement("input");
+                newNode.type = "number";
+                newNode.value = "0";
+                newNode.style = "width:40px; background-color:#202020; border-color:#101010; color:#909090;";
+                newNode.setAttribute("onchange","changeHullSetting("+index.toString()+",+"(9+i).toString()"+,this.value)");
+                node.append(newNode);
+        }     
+        node.append(document.createElement("br"));
+        
+        //wings
+        node.append("Wings ");
+        if (hullData.dropState[1]){
+                addButton(node,"◄","Collapse options","redrawButton("+nodeIndex.toString()+",1,false)"); 
+                
+                //TODO: DRAW WINGS DATA
+                
+        } else {
+                addButton(node,"▼","Expand options","redrawButton("+nodeIndex.toString()+",1,true)");
+        }
+        node.append(document.createElement("br"));
+        
+        //details
+        node.append("Details ");
+        if (hullData.dropState[2]){
+                addButton(node,"◄","Collapse options","redrawButton("+nodeIndex.toString()+",2,false)"); 
+                
+                //TODO: DRAW DETAILS DATA
+                
+        } else {
+                addButton(node,"▼","Expand options","redrawButton("+nodeIndex.toString()+",2,true)");
+        }
+        node.append(document.createElement("br"));
+        
+        
+        
+        
         
 }
 
@@ -233,6 +357,80 @@ function removeStrut(index){
         renderSettings();
 }
 
+function redrawButton(nodeIndex,setting,state){//handles settings buttons that cause a settings panel redraw
+        //inputs are index of source node, index of dropstate value, state to set
+        if (nodeIndex>hulls.length){
+                let i = nodeIndex-(1+hulls.length);
+                struts[i].dropState[setting] = state;
+                renderStrutSettings(leftPane.children[nodeIndex],i);
+                return;
+        }
+        let i = nodeIndex-1;
+        hulls[i].dropState[setting] = state;
+        renderHullSettings(leftPane.children[nodeIndex],i);
+}
+
+function changeHullSetting(index, setting, state){ //handles normal setting changes for hulls
+        //inputs are hulls index of target, setting case index (kludgy AF) and setting state (generally int or string)
+        let parsed = 0;
+        switch(setting) {
+                case 0:
+                break;
+                case 1:
+                        parsed = parseInt(index);
+                break;
+                case 2:
+                        parsed = parseInt(index);
+                break;
+                default:
+                        parsed = parseFloat(index);
+        }
+        if (parsed == NaN){return;}
+        
+        switch(setting) {
+                case 0:
+                        hulls[index].name = state;
+                break;
+                case 1:
+                        hulls[index].root = parsed;
+                break;
+                case 2:
+                        hulls[index].style = parsed;
+                break;
+                case 3:
+                        hulls[index].offset[0] = parsed;
+                break;
+                case 4:
+                        hulls[index].offset[1] = parsed;
+                break;
+                case 5:
+                        hulls[index].offset[2] = parsed;
+                break;
+                case 6:
+                        hulls[index].scale[0] = parsed;
+                break;
+                case 7:
+                        hulls[index].scale[1] = parsed;
+                break;
+                case 8:
+                        hulls[index].scale[2] = parsed;
+                break;
+                case 9:
+                        hulls[index].bias[0] = parsed;
+                break;
+                case 10:
+                        hulls[index].bias[1] = parsed;
+                break;
+                case 11:
+                        hulls[index].bias[2] = parsed;
+                break;
+                default:
+                        return;
+        }       
+}
+function changeStrutSetting (){
+        
+}
 
 
 

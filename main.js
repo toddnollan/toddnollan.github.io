@@ -233,7 +233,7 @@ function renderHullSettings(node, index){//fills the passed node with data from 
                 newNode.type = "number";
                 newNode.value = "0";
                 newNode.style = "width:40px; background-color:#202020; border-color:#101010; color:#909090;";
-                newNode.setAttribute("onchange","changeHullSetting("+index.toString()+",+"(3+i).toString()"+,this.value)");
+                newNode.setAttribute("onchange","changeHullSetting("+index.toString()+","+(3+i).toString()+",this.value)");
                 node.append(newNode);
         }     
         node.append(document.createElement("br"));
@@ -245,7 +245,7 @@ function renderHullSettings(node, index){//fills the passed node with data from 
                 newNode.type = "number";
                 newNode.value = "1";
                 newNode.style = "width:40px; background-color:#202020; border-color:#101010; color:#909090;";
-                newNode.setAttribute("onchange","changeHullSetting("+index.toString()+",+"(6+i).toString()"+,this.value)");
+                newNode.setAttribute("onchange","changeHullSetting("+index.toString()+","+(6+i).toString()+",this.value)");
                 node.append(newNode);
         }     
         node.append(document.createElement("br"));
@@ -257,7 +257,7 @@ function renderHullSettings(node, index){//fills the passed node with data from 
                 newNode.type = "number";
                 newNode.value = "0";
                 newNode.style = "width:40px; background-color:#202020; border-color:#101010; color:#909090;";
-                newNode.setAttribute("onchange","changeHullSetting("+index.toString()+",+"(9+i).toString()"+,this.value)");
+                newNode.setAttribute("onchange","changeHullSetting("+index.toString()+","+(9+i).toString()+",this.value)");
                 node.append(newNode);
         }     
         node.append(document.createElement("br"));

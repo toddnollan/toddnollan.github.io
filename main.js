@@ -384,7 +384,7 @@ function redrawButton(nodeIndex,setting,state){//handles settings buttons that c
 function changeHullSetting(index, uSetting, state){ //handles normal setting changes for hulls
         //inputs are hulls index of target, setting case index (kludgy AF) and setting state (generally int or string)
         
-        console.log(index.toString() + " " + setting.toString() + " " + state.toString());
+        console.log(index.toString() + " " + uSetting.toString() + " " + state.toString());
         
         let setting = parseInt(uSetting);
         

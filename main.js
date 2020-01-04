@@ -1,4 +1,4 @@
-const scriptVersion = "Script v.030"; //declare version, write to main
+const scriptVersion = "Script v.031"; //declare version, write to main
 document.getElementById("versionlabel").innerHTML = scriptVersion;
 //Declare Variables and constants
 const countPane = document.getElementById("countpane");
@@ -217,7 +217,7 @@ function renderHullSettings(node, index){//fills the passed node with data from 
                 newNode[0].append(newNode[1]);
         }
         newNode[0].title = "If a parent is set, position is inherited from it. If you don't know what this means, leave it at None";
-        newNode[0].value = hullData.parent.toString();
+        newNode[0].value = hullData.root.toString();
         newNode[0].setAttribute("onchange","changeHullSetting("+index.toString()+",1,this.value)");
         node.append(newNode[0]);
         node.append(document.createElement("br"));

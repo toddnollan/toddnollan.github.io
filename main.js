@@ -1,4 +1,4 @@
-const scriptVersion = "Script v.026"; //declare version, write to main
+const scriptVersion = "Script v.027"; //declare version, write to main
 document.getElementById("versionlabel").innerHTML = scriptVersion;
 //Declare Variables and constants
 const countPane = document.getElementById("countpane");
@@ -175,6 +175,14 @@ function renderHullSettings(node, index){//fills the passed node with data from 
         let nodeIndex = index+1;
         let newNode;
         let i;
+        let child = node.children[0];
+        while (child) {
+                node.removeChild(child);
+                child = node.children[0];
+        }
+        
+        
+        
         if (hullData.dropState[0]){
                 node.append(hullData.name + " ");
                 addButton(node,"▼","Expand options","redrawButton("+nodeIndex.toString()+",0,true)");

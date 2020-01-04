@@ -1,4 +1,4 @@
-const scriptVersion = "Script v.032"; //declare version, write to main
+const scriptVersion = "Script v.033"; //declare version, write to main
 document.getElementById("versionlabel").innerHTML = scriptVersion;
 //Declare Variables and constants
 const countPane = document.getElementById("countpane");
@@ -440,7 +440,8 @@ function changeHullSetting(index, setting, state){ //handles normal setting chan
                 break;
                 default:
                         return;
-        }       
+        }
+        console.log(hulls[index].bias[2].toString());
 }
 function changeStrutSetting (){
         

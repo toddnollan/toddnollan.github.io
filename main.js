@@ -1,5 +1,4 @@
-const scriptVersion = "Script v.036"; //declare version, write to main
-document.getElementById("versionlabel").innerHTML = scriptVersion;
+document.getElementById("versionlabel").innerText = "Script v.037"; // write version to main
 //Declare Variables and constants
 const countPane = document.getElementById("countpane");
 const leftPane = document.getElementById("leftpane");
@@ -381,29 +380,21 @@ function redrawButton(nodeIndex,setting,state){//handles settings buttons that c
         renderHullSettings(leftPane.children[nodeIndex],i);
 }
 
-function changeHullSetting(index, uSetting, state){ //handles normal setting changes for hulls
+function changeHullSetting(index, setting, state){ //handles normal setting changes for hulls
         //inputs are hulls index of target, setting case index (kludgy AF) and setting state (generally int or string)
-        
-        console.log(index.toString() + " " + uSetting.toString() + " " + state.toString());
-        
-        let setting = parseInt(uSetting);
         
         let parsed = 0;
         switch(setting) {
                 case 0:
-                        console.log("case 0");
                 break;
                 case 1:
-                        console.log("case 1");
-                        parsed = parseInt(index);
+                        parsed = parseInt(state);
                 break;
                 case 2:
-                        console.log("case 2");
-                        parsed = parseInt(index);
+                        parsed = parseInt(state);
                 break;
                 default:
-                        console.log("case def");
-                        parsed = parseFloat(index);
+                        parsed = parseFloat(state);
         }
         if (parsed == NaN){return;}
         
@@ -447,7 +438,6 @@ function changeHullSetting(index, uSetting, state){ //handles normal setting cha
                 default:
                         return;
         }
-        console.log(hulls[index].bias[2].toString() + "," + parsed.toString());
 }
 function changeStrutSetting (){
         

@@ -1,4 +1,4 @@
-const scriptVersion = "Script v.035"; //declare version, write to main
+const scriptVersion = "Script v.036"; //declare version, write to main
 document.getElementById("versionlabel").innerHTML = scriptVersion;
 //Declare Variables and constants
 const countPane = document.getElementById("countpane");
@@ -391,14 +391,18 @@ function changeHullSetting(index, uSetting, state){ //handles normal setting cha
         let parsed = 0;
         switch(setting) {
                 case 0:
+                        console.log("case 0");
                 break;
                 case 1:
+                        console.log("case 1");
                         parsed = parseInt(index);
                 break;
                 case 2:
+                        console.log("case 2");
                         parsed = parseInt(index);
                 break;
                 default:
+                        console.log("case def");
                         parsed = parseFloat(index);
         }
         if (parsed == NaN){return;}

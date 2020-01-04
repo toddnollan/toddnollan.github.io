@@ -183,7 +183,7 @@ function renderHullSettings(node, index){//fills the passed node with data from 
         
         
         
-        if (hullData.dropState[0]){
+        if (!hullData.dropState[0]){
                 node.append(hullData.name + " ");
                 addButton(node,"▼","Expand options","redrawButton("+nodeIndex.toString()+",0,true)");
                 return;

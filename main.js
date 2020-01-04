@@ -1,4 +1,4 @@
-const scriptVersion = "Script v.028"; //declare version, write to main
+const scriptVersion = "Script v.029"; //declare version, write to main
 document.getElementById("versionlabel").innerHTML = scriptVersion;
 //Declare Variables and constants
 const countPane = document.getElementById("countpane");
@@ -217,11 +217,12 @@ function renderHullSettings(node, index){//fills the passed node with data from 
                 newNode[0].append(newNode[1]);
         }
         newNode[0].title = "If a parent is set, position is inherited from it. If you don't know what this means, leave it at None";
+        newNode[0].value = hullData.parent;
         newNode[0].setAttribute("onchange","changeHullSetting("+index.toString()+",1,this.value)");
         node.append(newNode[0]);
         node.append(document.createElement("br"));
         
-        //Style
+        //style
         node.append("Style: ");
         newNode = [];
         newNode[0] = document.createElement("select");
@@ -232,6 +233,7 @@ function renderHullSettings(node, index){//fills the passed node with data from 
                 newNode[0].append(newNode[1]);
         }
         newNode[0].setAttribute("onchange","changeHullSetting("+index.toString()+",2,this.value)");
+        newNode[0].value = hullData.style;
         node.append(newNode[0]);
         node.append(document.createElement("br"));
         
@@ -240,32 +242,32 @@ function renderHullSettings(node, index){//fills the passed node with data from 
         for (i=0;i<3;i++){
                 newNode = document.createElement("input");
                 newNode.type = "number";
-                newNode.value = "0";
                 newNode.style = "width:40px; background-color:#202020; border-color:#101010; color:#909090;";
+                newNode.value = hullData.offset[i];
                 newNode.setAttribute("onchange","changeHullSetting("+index.toString()+","+(3+i).toString()+",this.value)");
                 node.append(newNode);
         }     
         node.append(document.createElement("br"));
         
-        //Scale
+        //scale
         node.append("Scale: ");
         for (i=0;i<3;i++){
                 newNode = document.createElement("input");
                 newNode.type = "number";
-                newNode.value = "1";
                 newNode.style = "width:40px; background-color:#202020; border-color:#101010; color:#909090;";
+                newNode.value = hullData.scale[i];
                 newNode.setAttribute("onchange","changeHullSetting("+index.toString()+","+(6+i).toString()+",this.value)");
                 node.append(newNode);
         }     
         node.append(document.createElement("br"));
         
-        //Bias
+        //bias
         node.append("Bias: ");
         for (i=0;i<3;i++){
                 newNode = document.createElement("input");
                 newNode.type = "number";
-                newNode.value = "0";
                 newNode.style = "width:40px; background-color:#202020; border-color:#101010; color:#909090;";
+                newNode.value = hullData.bias[i];
                 newNode.setAttribute("onchange","changeHullSetting("+index.toString()+","+(9+i).toString()+",this.value)");
                 node.append(newNode);
         }     

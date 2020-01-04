@@ -1,4 +1,4 @@
-const scriptVersion = "Script v.034"; //declare version, write to main
+const scriptVersion = "Script v.035"; //declare version, write to main
 document.getElementById("versionlabel").innerHTML = scriptVersion;
 //Declare Variables and constants
 const countPane = document.getElementById("countpane");
@@ -381,10 +381,12 @@ function redrawButton(nodeIndex,setting,state){//handles settings buttons that c
         renderHullSettings(leftPane.children[nodeIndex],i);
 }
 
-function changeHullSetting(index, setting, state){ //handles normal setting changes for hulls
+function changeHullSetting(index, uSetting, state){ //handles normal setting changes for hulls
         //inputs are hulls index of target, setting case index (kludgy AF) and setting state (generally int or string)
         
         console.log(index.toString() + " " + setting.toString() + " " + state.toString());
+        
+        let setting = parseInt(uSetting);
         
         let parsed = 0;
         switch(setting) {

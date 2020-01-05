@@ -1,4 +1,4 @@
-document.getElementById("versionlabel").innerText = "Script v.043"; // write version to main
+document.getElementById("versionlabel").innerText = "Script v.044"; // write version to main
 //Declare Variables and constants
 const countPane = document.getElementById("countpane");
 const leftPane = document.getElementById("leftpane");
@@ -92,12 +92,12 @@ function addHull(){
                 },
                 
                 position:function(){ //returns 3 item array of xyz positions.
-                        if (!this.validRoot()){return this.offsets;}
+                        if (!this.validRoot()){return this.offset;}
                         this.posSearch = true;
                         if (hulls[this.root].posSearch){
                                 this.posSearch = false;
                                 this.root = -1;
-                                return this.offsets;
+                                return this.offset;
                         }
                         let rootPos = hulls[this.root].position();
                         let out = [];

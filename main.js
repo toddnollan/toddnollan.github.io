@@ -1,8 +1,14 @@
-document.getElementById("versionlabel").innerText = "Script v.037"; // write version to main
+document.getElementById("versionlabel").innerText = "Script v.038"; // write version to main
 //Declare Variables and constants
 const countPane = document.getElementById("countpane");
 const leftPane = document.getElementById("leftpane");
 const hullStyles = ["Spheroid","Beveled Cuboid"];
+const strutStyles = ["Inwards Curve","Straight","Rounded Thin"];
+const wingStyles = ["Plain Sharp", "Plain Rounded"]
+
+
+
+
 
 
 let hulls = [];
@@ -72,9 +78,11 @@ function addHull(){
                 offset  :[0,0,0], //XYZ right-left,up-down,forward-back, offset from parent
                 scale   :[1,1,5], //width/hieght/length. Not inherited by hulls, situationally inherited by others
                 bias    :[0,0,0], //XYZ generation bulge bias
+                biasScale       :[0,0,0], //XYZ more stuff
                 wings   :[], //array of wing objects owned by this
                 details :[], //array of detail objects owned by this
                 style   :0, //style selector. This is fed to the generator
+                bevel   :[0,0], //distance,vertices of bevelling
                 posSearch       :false, //is searching for position value to prevent loops
                 dropState	:[false,false,false], //state of drop-down menus in settings
         
@@ -133,7 +141,8 @@ function addStrut(){
                 thickBias       :[0,0,0], //xyz bias of thickness
                 details :[],
                 style   :0,
-                dropState	:[false,false,false] //state of drop-down menus in settings
+                bevel   :[0,0],
+                dropState	:[false,false] //state of drop-down menus in settings
         }
         //TODO
         struts.push(strut);
@@ -216,8 +225,9 @@ function renderHullSettings(node, index){//fills the passed node with data from 
                 newNode[0].append(newNode[1]);
         }
         newNode[0].title = "If a parent is set, position is inherited from it. If you don't know what this means, leave it at None";
-        newNode[0].value = hullData.root.toString();
+        newNode[0].value = hullData.root;
         newNode[0].setAttribute("onchange","changeHullSetting("+index.toString()+",1,this.value)");
+        newNode[0].style = "background-color:#202020; border-color:#101010; color:#909090;";
         node.append(newNode[0]);
         node.append(document.createElement("br"));
         
@@ -232,7 +242,8 @@ function renderHullSettings(node, index){//fills the passed node with data from 
                 newNode[0].append(newNode[1]);
         }
         newNode[0].setAttribute("onchange","changeHullSetting("+index.toString()+",2,this.value)");
-        newNode[0].value = hullData.style.toString();
+        newNode[0].value = hullData.style;
+        newNode[0].style = "background-color:#202020; border-color:#101010; color:#909090;";
         node.append(newNode[0]);
         node.append(document.createElement("br"));
         
@@ -272,6 +283,34 @@ function renderHullSettings(node, index){//fills the passed node with data from 
         }     
         node.append(document.createElement("br"));
         
+        //biasScale
+        node.append("Bias Scale: ");
+        for (i=0;i<3;i++){
+                newNode = document.createElement("input");
+                newNode.type = "number";
+                newNode.style = "width:40px; background-color:#202020; border-color:#101010; color:#909090;";
+                newNode.value = hullData.biasScale[i];
+                newNode.setAttribute("onchange","changeHullSetting("+index.toString()+","+(12+i).toString()+",this.value)");
+                node.append(newNode);
+        }     
+        node.append(document.createElement("br"));
+        
+        //bevel
+        node.append("Bevel distance: ");
+        newNode = document.createElement("input");
+        newNode.type = "number";
+        newNode.style = "width:40px; background-color:#202020; border-color:#101010; color:#909090;";
+        newNode.value = hullData.bevel[0];
+        newNode.setAttribute("onchange","changeHullSetting("+index.toString()+",15,this.value)");
+        node.append(newNode);
+        node.append(" Amount: ");
+        newNode = document.createElement("input");
+        newNode.type = "number";
+        newNode.style = "width:40px; background-color:#202020; border-color:#101010; color:#909090;";
+        newNode.value = hullData.bevel[1];
+        newNode.setAttribute("onchange","changeHullSetting("+index.toString()+",16,this.value)");
+        node.append(newNode);
+        
         //wings
         node.append("Wings ");
         if (hullData.dropState[1]){
@@ -294,7 +333,6 @@ function renderHullSettings(node, index){//fills the passed node with data from 
         } else {
                 addButton(node,"▼","Expand options","redrawButton("+nodeIndex.toString()+",2,true)");
         }
-        node.append(document.createElement("br"));
         
         
         
@@ -303,6 +341,152 @@ function renderHullSettings(node, index){//fills the passed node with data from 
 }
 
 function renderStrutSettings(node, index){//fills the passed node with data from the given index
+        let strutData = struts[index];
+        let nodeIndex = index+1+hulls.length;
+        let newNode;
+        let i;
+        let child = node.children[0];
+        while (child) {
+                node.removeChild(child);
+                child = node.children[0];
+        }
+        node.innerText = "";
+        
+         
+        
+        if (!strutData.dropState[0]){
+                node.append(strutData.name + " ");
+                addButton(node,"▼","Expand options","redrawButton("+nodeIndex.toString()+",0,true)");
+                return;
+        }
+        //Name and collapse settings
+        newNode = document.createElement("input");
+        newNode.type = "text";
+        newNode.value = strutData.name;
+        newNode.setAttribute("onchange","changeHullSetting("+index.toString()+",0,this.value)");
+        node.append(newNode);
+        addButton(node,"◄","Collapse options","redrawButton("+nodeIndex.toString()+",0,false)");
+        node.append(document.createElement("br"));
+        
+        //delete strut
+        addButton(node,"Delete Strut","Removes this Strut.","removeStrut("+index.toString()+")");
+        node.append(document.createElement("br"));
+        
+        //parents
+        node.append("Parents: ");
+        newNode = [];
+        newNode[0] = document.createElement("select");
+        newNode[1] = document.createElement("option");
+        newNode[1].value = -1;
+        newNode[1].innerText = "None";
+        newNode[0].append(newNode[1]);
+        for (i = 0; i<hulls.length; i++){
+                newNode[1] = document.createElement("option");
+                newNode[1].value = i;
+                newNode[1].innerText = hulls[i].name;
+                newNode[0].append(newNode[1]);
+        }
+        newNode[0].title = "The Strut is generated between the two selected Parents";
+        newNode[0].value = strutData.roots[0];
+        newNode[0].setAttribute("onchange","changeHullSetting("+index.toString()+",1,this.value)");
+        newNode[0].style = "background-color:#202020; border-color:#101010; color:#909090;";
+        node.append(newNode[0]);
+        newNode[0] = document.createElement("select");
+        newNode[1] = document.createElement("option");
+        newNode[1].value = -1;
+        newNode[1].innerText = "None";
+        newNode[0].append(newNode[1]);
+        for (i = 0; i<hulls.length; i++){
+                newNode[1] = document.createElement("option");
+                newNode[1].value = i;
+                newNode[1].innerText = hulls[i].name;
+                newNode[0].append(newNode[1]);
+        }
+        newNode[0].title = "The Strut is generated between the two selected Parents";
+        newNode[0].value = strutData.roots[1];
+        newNode[0].setAttribute("onchange","changeHullSetting("+index.toString()+",2,this.value)");
+        newNode[0].style = "background-color:#202020; border-color:#101010; color:#909090;";
+        node.append(newNode[0]);
+        node.append(document.createElement("br"));
+        
+        //style
+        node.append("Style: ");
+        newNode = [];
+        newNode[0] = document.createElement("select");
+        for (i = 0; i<strutStyles.length; i++){
+                newNode[1] = document.createElement("option");
+                newNode[1].value = i;
+                newNode[1].innerText = strutStyles[i];
+                newNode[0].append(newNode[1]);
+        }
+        newNode[0].setAttribute("onchange","changeHullSetting("+index.toString()+",3,this.value)");
+        newNode[0].value = strutData.style;
+        newNode[0].style = "background-color:#202020; border-color:#101010; color:#909090;";
+        node.append(newNode[0]);
+        node.append(document.createElement("br"));
+        
+        //scale
+        node.append("Scale: ");
+        for (i=0;i<2;i++){
+                newNode = document.createElement("input");
+                newNode.type = "number";
+                newNode.style = "width:40px; background-color:#202020; border-color:#101010; color:#909090;";
+                newNode.value = strutData.scale[i];
+                newNode.setAttribute("onchange","changeHullSetting("+index.toString()+","+(4+i).toString()+",this.value)");
+                node.append(newNode);
+        }     
+        node.append(document.createElement("br"));
+        
+        //pathBias
+        node.append("Path Bias: ");
+        for (i=0;i<3;i++){
+                newNode = document.createElement("input");
+                newNode.type = "number";
+                newNode.style = "width:40px; background-color:#202020; border-color:#101010; color:#909090;";
+                newNode.value = strutData.pathBias[i];
+                newNode.setAttribute("onchange","changeHullSetting("+index.toString()+","+(6+i).toString()+",this.value)");
+                node.append(newNode);
+        }
+        node.append(document.createElement("br"));
+        
+        //thickBias
+        node.append("Thickness Bias: ");
+        for (i=0;i<3;i++){
+                newNode = document.createElement("input");
+                newNode.type = "number";
+                newNode.style = "width:40px; background-color:#202020; border-color:#101010; color:#909090;";
+                newNode.value = strutData.thickBias[i];
+                newNode.setAttribute("onchange","changeHullSetting("+index.toString()+","+(9+i).toString()+",this.value)");
+                node.append(newNode);
+        }
+        node.append(document.createElement("br"));
+        
+        //bevel
+        node.append("Bevel distance: ");
+        newNode = document.createElement("input");
+        newNode.type = "number";
+        newNode.style = "width:40px; background-color:#202020; border-color:#101010; color:#909090;";
+        newNode.value = strutData.bevel[0];
+        newNode.setAttribute("onchange","changeHullSetting("+index.toString()+",12,this.value)");
+        node.append(newNode);
+        node.append(" Amount: ");
+        newNode = document.createElement("input");
+        newNode.type = "number";
+        newNode.style = "width:40px; background-color:#202020; border-color:#101010; color:#909090;";
+        newNode.value = strutData.bevel[1];
+        newNode.setAttribute("onchange","changeHullSetting("+index.toString()+",13,this.value)");
+        node.append(newNode);
+        
+        //details
+        node.append("Details ");
+        if (hullData.dropState[1]){
+                addButton(node,"◄","Collapse options","redrawButton("+nodeIndex.toString()+",1,false)"); 
+                
+                //TODO: DRAW DETAILS DATA
+                
+        } else {
+                addButton(node,"▼","Expand options","redrawButton("+nodeIndex.toString()+",1,true)");
+        }
         
 }
 
@@ -382,7 +566,7 @@ function redrawButton(nodeIndex,setting,state){//handles settings buttons that c
 
 function changeHullSetting(index, setting, state){ //handles normal setting changes for hulls
         //inputs are hulls index of target, setting case index (kludgy AF) and setting state (generally int or string)
-        
+        index, setting, state
         let parsed = 0;
         switch(setting) {
                 case 0:
@@ -391,6 +575,9 @@ function changeHullSetting(index, setting, state){ //handles normal setting chan
                         parsed = parseInt(state);
                 break;
                 case 2:
+                        parsed = parseInt(state);
+                break;
+                case 16:
                         parsed = parseInt(state);
                 break;
                 default:
@@ -435,12 +622,95 @@ function changeHullSetting(index, setting, state){ //handles normal setting chan
                 case 11:
                         hulls[index].bias[2] = parsed;
                 break;
+                case 12:
+                        hulls[index].biasScale[0] = parsed;
+                break;
+                case 13:
+                        hulls[index].biasScale[1] = parsed;
+                break;
+                case 14:
+                        hulls[index].biasScale[2] = parsed;
+                break;
+                case 15:
+                        hulls[index].bevel[0] = parsed;
+                break;
+                case 16:
+                        hulls[index].bevel[1] = parsed;
+                break;
+                
                 default:
                         return;
         }
 }
-function changeStrutSetting (){
+function changeStrutSetting (index, setting, state){
+        let parsed = 0;
+        switch(setting) {
+                case 0:
+                break;
+                case 1:
+                        parsed = parseInt(state);
+                break;
+                case 2:
+                        parsed = parseInt(state);
+                break;
+                case 3:
+                        parsed = parseInt(state);
+                break;
+                case 13:
+                        parsed = parseInt(state);
+                break;
+                default:
+                        parsed = parseFloat(state);
+        }
+        if (parsed == NaN){return;}
         
+        switch(setting) {
+                case 0:
+                        hulls[index].name = state;
+                break;
+                case 1:
+                        hulls[index].root[0] = parsed;
+                break;
+                case 2:
+                        hulls[index].root[1] = parsed;
+                break;
+                case 3:
+                        hulls[index].style = parsed;
+                break;
+                case 4:
+                        hulls[index].scale[0] = parsed;
+                break;
+                case 5:
+                        hulls[index].scale[1] = parsed;
+                break;
+                case 6:
+                        hulls[index].pathBias[0] = parsed;
+                break;
+                case 7:
+                        hulls[index].pathBias[1] = parsed;
+                break;
+                case 8:
+                        hulls[index].pathBias[2] = parsed;
+                break;
+                case 9:
+                        hulls[index].thickBias[0] = parsed;
+                break;
+                case 10:
+                        hulls[index].thickBias[1] = parsed;
+                break;
+                case 11:
+                        hulls[index].thickBias[2] = parsed;
+                break;
+                case 12:
+                        hulls[index].bevel[0] = parsed;
+                break;
+                case 13:
+                        hulls[index].bevel[1] = parsed;
+                break;
+                
+                default:
+                        return;
+        }
 }
 
 

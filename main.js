@@ -1,4 +1,4 @@
-document.getElementById("versionlabel").innerText = "Script v.039"; // write version to main
+document.getElementById("versionlabel").innerText = "Script v.040"; // write version to main
 //Declare Variables and constants
 const countPane = document.getElementById("countpane");
 const leftPane = document.getElementById("leftpane");
@@ -219,7 +219,7 @@ function renderHullSettings(node, index){//fills the passed node with data from 
         newNode[1].value = -1;
         newNode[1].innerText = "None";
         newNode[0].append(newNode[1]);
-        for (i = hulls.length - 1; i>index; i--){
+        for (i = 0; i<index; i++){
                 newNode[1] = document.createElement("option");
                 newNode[1].value = i;
                 newNode[1].innerText = hulls[i].name;
@@ -670,46 +670,46 @@ function changeStrutSetting (index, setting, state){
         
         switch(setting) {
                 case 0:
-                        hulls[index].name = state;
+                        struts[index].name = state;
                 break;
                 case 1:
-                        hulls[index].root[0] = parsed;
+                        struts[index].root[0] = parsed;
                 break;
                 case 2:
-                        hulls[index].root[1] = parsed;
+                        struts[index].root[1] = parsed;
                 break;
                 case 3:
-                        hulls[index].style = parsed;
+                        struts[index].style = parsed;
                 break;
                 case 4:
-                        hulls[index].scale[0] = parsed;
+                        struts[index].scale[0] = parsed;
                 break;
                 case 5:
-                        hulls[index].scale[1] = parsed;
+                        struts[index].scale[1] = parsed;
                 break;
                 case 6:
-                        hulls[index].pathBias[0] = parsed;
+                        struts[index].pathBias[0] = parsed;
                 break;
                 case 7:
-                        hulls[index].pathBias[1] = parsed;
+                        struts[index].pathBias[1] = parsed;
                 break;
                 case 8:
-                        hulls[index].pathBias[2] = parsed;
+                        struts[index].pathBias[2] = parsed;
                 break;
                 case 9:
-                        hulls[index].thickBias[0] = parsed;
+                        struts[index].thickBias[0] = parsed;
                 break;
                 case 10:
-                        hulls[index].thickBias[1] = parsed;
+                        struts[index].thickBias[1] = parsed;
                 break;
                 case 11:
-                        hulls[index].thickBias[2] = parsed;
+                        struts[index].thickBias[2] = parsed;
                 break;
                 case 12:
-                        hulls[index].bevel[0] = parsed;
+                        struts[index].bevel[0] = parsed;
                 break;
                 case 13:
-                        hulls[index].bevel[1] = parsed;
+                        struts[index].bevel[1] = parsed;
                 break;
                 
                 default:

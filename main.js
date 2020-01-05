@@ -1,4 +1,4 @@
-document.getElementById("versionlabel").innerText = "Script v.042"; // write version to main
+document.getElementById("versionlabel").innerText = "Script v.043"; // write version to main
 //Declare Variables and constants
 const countPane = document.getElementById("countpane");
 const leftPane = document.getElementById("leftpane");
@@ -695,10 +695,10 @@ function changeStrutSetting (index, setting, state){
                         struts[index].name = state;
                 break;
                 case 1:
-                        struts[index].root[0] = parsed;
+                        struts[index].roots[0] = parsed;
                 break;
                 case 2:
-                        struts[index].root[1] = parsed;
+                        struts[index].roots[1] = parsed;
                 break;
                 case 3:
                         struts[index].style = parsed;

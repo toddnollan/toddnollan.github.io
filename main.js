@@ -1,4 +1,4 @@
-document.getElementById("versionlabel").innerText = "Script v.038"; // write version to main
+document.getElementById("versionlabel").innerText = "Script v.039"; // write version to main
 //Declare Variables and constants
 const countPane = document.getElementById("countpane");
 const leftPane = document.getElementById("leftpane");
@@ -201,6 +201,7 @@ function renderHullSettings(node, index){//fills the passed node with data from 
         newNode = document.createElement("input");
         newNode.type = "text";
         newNode.value = hullData.name;
+        newNode.style = "background-color:#202020; border-color:#101010; color:#909090;";
         newNode.setAttribute("onchange","changeHullSetting("+index.toString()+",0,this.value)");
         node.append(newNode);
         addButton(node,"◄","Collapse options","redrawButton("+nodeIndex.toString()+",0,false)");
@@ -218,7 +219,7 @@ function renderHullSettings(node, index){//fills the passed node with data from 
         newNode[1].value = -1;
         newNode[1].innerText = "None";
         newNode[0].append(newNode[1]);
-        for (i = index + 1; i<hulls.length; i++){
+        for (i = hulls.length - 1; i>index; i--){
                 newNode[1] = document.createElement("option");
                 newNode[1].value = i;
                 newNode[1].innerText = hulls[i].name;
@@ -310,6 +311,7 @@ function renderHullSettings(node, index){//fills the passed node with data from 
         newNode.value = hullData.bevel[1];
         newNode.setAttribute("onchange","changeHullSetting("+index.toString()+",16,this.value)");
         node.append(newNode);
+        node.append(document.createElement("br"));
         
         //wings
         node.append("Wings ");
@@ -363,7 +365,8 @@ function renderStrutSettings(node, index){//fills the passed node with data from
         newNode = document.createElement("input");
         newNode.type = "text";
         newNode.value = strutData.name;
-        newNode.setAttribute("onchange","changeHullSetting("+index.toString()+",0,this.value)");
+        newNode.style = "background-color:#202020; border-color:#101010; color:#909090;";
+        newNode.setAttribute("onchange","changeStrutSetting("+index.toString()+",0,this.value)");
         node.append(newNode);
         addButton(node,"◄","Collapse options","redrawButton("+nodeIndex.toString()+",0,false)");
         node.append(document.createElement("br"));
@@ -388,7 +391,7 @@ function renderStrutSettings(node, index){//fills the passed node with data from
         }
         newNode[0].title = "The Strut is generated between the two selected Parents";
         newNode[0].value = strutData.roots[0];
-        newNode[0].setAttribute("onchange","changeHullSetting("+index.toString()+",1,this.value)");
+        newNode[0].setAttribute("onchange","changeStrutSetting("+index.toString()+",1,this.value)");
         newNode[0].style = "background-color:#202020; border-color:#101010; color:#909090;";
         node.append(newNode[0]);
         newNode[0] = document.createElement("select");
@@ -404,7 +407,7 @@ function renderStrutSettings(node, index){//fills the passed node with data from
         }
         newNode[0].title = "The Strut is generated between the two selected Parents";
         newNode[0].value = strutData.roots[1];
-        newNode[0].setAttribute("onchange","changeHullSetting("+index.toString()+",2,this.value)");
+        newNode[0].setAttribute("onchange","changeStrutSetting("+index.toString()+",2,this.value)");
         newNode[0].style = "background-color:#202020; border-color:#101010; color:#909090;";
         node.append(newNode[0]);
         node.append(document.createElement("br"));
@@ -419,7 +422,7 @@ function renderStrutSettings(node, index){//fills the passed node with data from
                 newNode[1].innerText = strutStyles[i];
                 newNode[0].append(newNode[1]);
         }
-        newNode[0].setAttribute("onchange","changeHullSetting("+index.toString()+",3,this.value)");
+        newNode[0].setAttribute("onchange","changeStrutSetting("+index.toString()+",3,this.value)");
         newNode[0].value = strutData.style;
         newNode[0].style = "background-color:#202020; border-color:#101010; color:#909090;";
         node.append(newNode[0]);
@@ -432,7 +435,7 @@ function renderStrutSettings(node, index){//fills the passed node with data from
                 newNode.type = "number";
                 newNode.style = "width:40px; background-color:#202020; border-color:#101010; color:#909090;";
                 newNode.value = strutData.scale[i];
-                newNode.setAttribute("onchange","changeHullSetting("+index.toString()+","+(4+i).toString()+",this.value)");
+                newNode.setAttribute("onchange","changeStrutSetting("+index.toString()+","+(4+i).toString()+",this.value)");
                 node.append(newNode);
         }     
         node.append(document.createElement("br"));
@@ -444,7 +447,7 @@ function renderStrutSettings(node, index){//fills the passed node with data from
                 newNode.type = "number";
                 newNode.style = "width:40px; background-color:#202020; border-color:#101010; color:#909090;";
                 newNode.value = strutData.pathBias[i];
-                newNode.setAttribute("onchange","changeHullSetting("+index.toString()+","+(6+i).toString()+",this.value)");
+                newNode.setAttribute("onchange","changeStrutSetting("+index.toString()+","+(6+i).toString()+",this.value)");
                 node.append(newNode);
         }
         node.append(document.createElement("br"));
@@ -456,7 +459,7 @@ function renderStrutSettings(node, index){//fills the passed node with data from
                 newNode.type = "number";
                 newNode.style = "width:40px; background-color:#202020; border-color:#101010; color:#909090;";
                 newNode.value = strutData.thickBias[i];
-                newNode.setAttribute("onchange","changeHullSetting("+index.toString()+","+(9+i).toString()+",this.value)");
+                newNode.setAttribute("onchange","changeStrutSetting("+index.toString()+","+(9+i).toString()+",this.value)");
                 node.append(newNode);
         }
         node.append(document.createElement("br"));
@@ -467,15 +470,16 @@ function renderStrutSettings(node, index){//fills the passed node with data from
         newNode.type = "number";
         newNode.style = "width:40px; background-color:#202020; border-color:#101010; color:#909090;";
         newNode.value = strutData.bevel[0];
-        newNode.setAttribute("onchange","changeHullSetting("+index.toString()+",12,this.value)");
+        newNode.setAttribute("onchange","changeStrutSetting("+index.toString()+",12,this.value)");
         node.append(newNode);
         node.append(" Amount: ");
         newNode = document.createElement("input");
         newNode.type = "number";
         newNode.style = "width:40px; background-color:#202020; border-color:#101010; color:#909090;";
         newNode.value = strutData.bevel[1];
-        newNode.setAttribute("onchange","changeHullSetting("+index.toString()+",13,this.value)");
+        newNode.setAttribute("onchange","changeStrutSetting("+index.toString()+",13,this.value)");
         node.append(newNode);
+        node.append(document.createElement("br"));
         
         //details
         node.append("Details ");

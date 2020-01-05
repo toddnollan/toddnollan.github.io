@@ -1,4 +1,4 @@
-document.getElementById("versionlabel").innerText = "Script v.040"; // write version to main
+document.getElementById("versionlabel").innerText = "Script v.041"; // write version to main
 //Declare Variables and constants
 const countPane = document.getElementById("countpane");
 const leftPane = document.getElementById("leftpane");
@@ -483,7 +483,7 @@ function renderStrutSettings(node, index){//fills the passed node with data from
         
         //details
         node.append("Details ");
-        if (hullData.dropState[1]){
+        if (strutData.dropState[1]){
                 addButton(node,"◄","Collapse options","redrawButton("+nodeIndex.toString()+",1,false)"); 
                 
                 //TODO: DRAW DETAILS DATA

@@ -1,4 +1,4 @@
-document.getElementById("versionlabel").innerText = "Script v.041"; // write version to main
+document.getElementById("versionlabel").innerText = "Script v.042"; // write version to main
 //Declare Variables and constants
 const countPane = document.getElementById("countpane");
 const leftPane = document.getElementById("leftpane");
@@ -142,7 +142,14 @@ function addStrut(){
                 details :[],
                 style   :0,
                 bevel   :[0,0],
-                dropState	:[false,false] //state of drop-down menus in settings
+                dropState	:[false,false], //state of drop-down menus in settings
+                
+                validRoots:function(){
+                        if (this.roots[0] == -1 || this.roots[1] == -1 || this.roots[0] == this.roots[1]){
+                                return false;
+                        }
+                        return true;
+                }
         }
         //TODO
         struts.push(strut);
@@ -265,6 +272,7 @@ function renderHullSettings(node, index){//fills the passed node with data from 
         for (i=0;i<3;i++){
                 newNode = document.createElement("input");
                 newNode.type = "number";
+                newNode.min = 0;
                 newNode.style = "width:40px; background-color:#202020; border-color:#101010; color:#909090;";
                 newNode.value = hullData.scale[i];
                 newNode.setAttribute("onchange","changeHullSetting("+index.toString()+","+(6+i).toString()+",this.value)");
@@ -430,9 +438,23 @@ function renderStrutSettings(node, index){//fills the passed node with data from
         
         //scale
         node.append("Scale: ");
+        if (strutData.validRoots()){
+                let distance;
+                let pos1 = hulls[strutData.roots[0]].position();
+                let pos2 = hulls[strutData.roots[1]].position();
+                let posT = 0;
+                for (i=0; i<3; i++){
+                        posT += (pos1[i]-pos2[i])^2;
+                }
+                distance = Math.sqrt(posT);
+                node.append(distance.toString()+" ");
+        } else {
+                node.append("0 ");
+        }
         for (i=0;i<2;i++){
                 newNode = document.createElement("input");
                 newNode.type = "number";
+                newNode.min = 0;
                 newNode.style = "width:40px; background-color:#202020; border-color:#101010; color:#909090;";
                 newNode.value = strutData.scale[i];
                 newNode.setAttribute("onchange","changeStrutSetting("+index.toString()+","+(4+i).toString()+",this.value)");

@@ -1,10 +1,21 @@
-document.getElementById("versionlabel").innerText = "Script v.044"; // write version to main
+document.getElementById("versionlabel").innerText = "Script v.045"; // write version to main
 //Declare Variables and constants
 const countPane = document.getElementById("countpane");
 const leftPane = document.getElementById("leftpane");
+//Master lists for options
 const hullStyles = ["Spheroid","Beveled Cuboid"];
 const strutStyles = ["Inwards Curve","Straight","Rounded Thin"];
-const wingStyles = ["Plain Sharp", "Plain Rounded"]
+const wingStyles = ["Plain Sharp", "Plain Rounded"];
+const detailStyleTypes = ["Cut", "Add", "Surface Texture"];
+const detailStyles = [ //each line is category defined by detailStyleTypes
+        ["Simple 3d", "Simple 2d"],
+        ["Simple 3d", "Simple 2d"],
+        ["Roughen Section" "Smooth Section"]
+        ];
+const simple2dShapes = ["Circle", "Shape Match"];
+const simple3dShapes = ["Sphere", "Cube"];
+
+
 
 
 
@@ -437,19 +448,19 @@ function renderStrutSettings(node, index){//fills the passed node with data from
         node.append(document.createElement("br"));
         
         //scale
-        node.append("Scale: ");
+        node.append("Scale: "); //FINDME
         if (strutData.validRoots()){
                 let distance;
                 let pos1 = hulls[strutData.roots[0]].position();
                 let pos2 = hulls[strutData.roots[1]].position();
                 let posT = 0;
                 for (i=0; i<3; i++){
-                        posT += (pos1[i]-pos2[i])^2;
+                        posT += Math.pow((pos1[i]-pos2[i]),2);
                 }
                 distance = Math.sqrt(posT);
                 node.append(distance.toString()+" ");
         } else {
-                node.append("0 ");
+                node.append("NaN ");
         }
         for (i=0;i<2;i++){
                 newNode = document.createElement("input");

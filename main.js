@@ -9,7 +9,7 @@ const wingStyles = ["Plain Sharp", "Plain Rounded"];
 const detailStyles = [ //each line is category defined by first entry
         ["Wing", "Simple Blocky", "Simple Rounded"],
         ["Antenna", "Single", "Branching"],
-        ["Engine", "Surface Contour", "Square", "Circle"]
+        ["Engine", "Surface Contour", "Square", "Circle"],
         
         
         ["2d Basic Cut", "Circle", "Square", "Surface Match"],
@@ -38,7 +38,7 @@ const detailSpecialSettings = [ //Special settings for each category. I dearly h
         [],//3d Basic Cut
         [],//3d Basic Add
         [],//3d Basic Intersect
-        [],//3d Surface Texture
+        []//3d Surface Texture
         
         
         

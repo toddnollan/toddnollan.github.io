@@ -10,7 +10,7 @@ const detailStyleTypes = ["Cut", "Add", "Surface Texture"];
 const detailStyles = [ //each line is category defined by detailStyleTypes
         ["Simple 3d", "Simple 2d"],
         ["Simple 3d", "Simple 2d"],
-        ["Roughen Section" "Smooth Section"]
+        ["Simple 3d", "Simple 2d"]
         ];
 const simple2dShapes = ["Circle", "Shape Match"];
 const simple3dShapes = ["Sphere", "Cube"];

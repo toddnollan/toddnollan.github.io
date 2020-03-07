@@ -1,4 +1,4 @@
-document.getElementById("versionlabel").innerText = "Script v.045"; // write version to main
+document.getElementById("versionlabel").innerText = "Script v.046"; // write version to main
 //Declare Variables and constants
 const countPane = document.getElementById("countpane");
 const leftPane = document.getElementById("leftpane");
@@ -6,16 +6,43 @@ const leftPane = document.getElementById("leftpane");
 const hullStyles = ["Spheroid","Beveled Cuboid"];
 const strutStyles = ["Inwards Curve","Straight","Rounded Thin"];
 const wingStyles = ["Plain Sharp", "Plain Rounded"];
-const detailStyleTypes = ["Cut", "Add", "Surface Texture"];
-const detailStyles = [ //each line is category defined by detailStyleTypes
-        ["Simple 3d", "Simple 2d"],
-        ["Simple 3d", "Simple 2d"],
-        ["Simple 3d", "Simple 2d"]
+const detailStyles = [ //each line is category defined by first entry
+        ["Wing", "Simple Blocky", "Simple Rounded"],
+        ["Antenna", "Single", "Branching"],
+        ["Engine", "Surface Contour", "Square", "Circle"]
+        
+        
+        ["2d Basic Cut", "Circle", "Square", "Surface Match"],
+        ["2d Basic Add", "Circle", "Square", "Surface Match"],
+        ["2d Basic Intersect", "Circle", "Square", "Surface Match"],
+        ["2d Surface Texture", "Circle", "Square", "Surface Match"],
+        
+        ["3d Basic Cut", "Cube", "Sphere"],
+        ["3d Basic Add", "Cube", "Sphere"],
+        ["3d Basic Intersect", "Cube", "Sphere"],
+        ["3d Surface Texture", "Cube", "Sphere"]
+        
         ];
-const simple2dShapes = ["Circle", "Shape Match"];
-const simple3dShapes = ["Sphere", "Cube"];
 
-
+const detailSpecialSettings = [ //Special settings for each category. I dearly hope these will all be numerical.
+        [],//Wing
+        [],//Antenna
+        [],//Engine
+        
+        
+        ["Depth"],//2d Basic Cut
+        ["Depth"],//2d Basic Add
+        ["Depth"],//2d Basic Intersect
+        ["Depth"],//2d Surface Texture
+        
+        [],//3d Basic Cut
+        [],//3d Basic Add
+        [],//3d Basic Intersect
+        [],//3d Surface Texture
+        
+        
+        
+        ];
 
 
 
@@ -85,12 +112,11 @@ addHull(); //just opening with *something*. Strictly speaking, is not needed.
 function addHull(){
         let hull={ // base objects of any craft.
                 root    :-1, //Hulls index of parent hull. If negative, offsets are taken as absolute
-                name    :"unnamed", //displays in hulls list
+                name    :"Hull " + hulls.length.toString(), //displays in hulls list
                 offset  :[0,0,0], //XYZ right-left,up-down,forward-back, offset from parent
                 scale   :[1,1,5], //width/hieght/length. Not inherited by hulls, situationally inherited by others
                 bias    :[0,0,0], //XYZ generation bulge bias
                 biasScale       :[0,0,0], //XYZ more stuff
-                wings   :[], //array of wing objects owned by this
                 details :[], //array of detail objects owned by this
                 style   :0, //style selector. This is fed to the generator
                 bevel   :[0,0], //distance,vertices of bevelling
@@ -120,13 +146,6 @@ function addHull(){
                         return out;
                 },
                 
-                addWing :function(){
-                        let wing={ //large, forward-aligned details.
-                                //TODO
-                        } 
-                        this.wings.push(wing);
-                },
-                
                 addDetail:function(){
                         let detail={
                                 type:0, //supercategory of style, will index to things like engines and blocky and such
@@ -146,7 +165,7 @@ function addStrut(){
         
         let strut={ //large, forward aligned connectors between hulls
                 roots   :[-1,-1], //indexes of parent hulls. required to generate, changeable in details panel.
-                name    :"unnamed", // displays in hulls list
+                name    :"Strut " + struts.length.toString(), // displays in hulls list
                 scale   :[1,1], //y-z scale. X is set by hulls distance
                 pathBias        :[0,0,0], //xyz bias of curve
                 thickBias       :[0,0,0], //xyz bias of thickness
@@ -332,18 +351,6 @@ function renderHullSettings(node, index){//fills the passed node with data from 
         node.append(newNode);
         node.append(document.createElement("br"));
         
-        //wings
-        node.append("Wings ");
-        if (hullData.dropState[1]){
-                addButton(node,"◄","Collapse options","redrawButton("+nodeIndex.toString()+",1,false)"); 
-                
-                //TODO: DRAW WINGS DATA
-                
-        } else {
-                addButton(node,"▼","Expand options","redrawButton("+nodeIndex.toString()+",1,true)");
-        }
-        node.append(document.createElement("br"));
-        
         //details
         node.append("Details ");
         if (hullData.dropState[2]){
@@ -448,7 +455,7 @@ function renderStrutSettings(node, index){//fills the passed node with data from
         node.append(document.createElement("br"));
         
         //scale
-        node.append("Scale: "); //FINDME
+        node.append("Scale: ");
         if (strutData.validRoots()){
                 let distance;
                 let pos1 = hulls[strutData.roots[0]].position();
@@ -750,7 +757,15 @@ function changeStrutSetting (index, setting, state){
         }
 }
 
-
+function changeDetailSetting (
+         type, //0-1, Hull or Strut
+         index, //Index of hull or strut element
+         subIndex, //Index of element's details pane
+         setting, //Index of this document's settings layout
+         state //The value to be set
+){
+        //TODO
+}
 
 
 
